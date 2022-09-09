@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+  <meta charset="UTF-8">
+  <title>ChatBot</title>
+  
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" media="screen" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
+
+
+
+	<title>Chat bot</title>
+
+	<!--  -->
+
+	<style>
+		.title {
+			background-color: white;
+			color: #021119;
+			text-align: center;
+			padding: 100px;
+			-webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+			
+			
+		}
+		
+		.letsSpeak {
+			background-color: #064104;
+		
+			color: white;
+			padding-top: 50px;
+			padding-bottom: 50px;
+			padding-left: 100px;
+			padding-right: 100px;
+		}
+		
+		.knowledge {
+			background-color:white;
+			color: black;
+			padding-top: 50px;
+			padding-bottom: 50px;
+			padding-left: 100px;
+			padding-right: 100px;
+		}
+		
+		.teach {
+			
+			background-color: #064104;
+			color: white;
+			padding-top: 50px;
+			padding-bottom: 50px;
+			padding-left: 100px;
+			padding-right: 100px;
+		}
+		
+		a {
+			color: black;
+			
+		}
+		button {
+			background-color: #09b403;
+		}
+	</style>
+
+</head>
+
+<body>
+	
+	<div class="title" id="title">
+	<h2>Hi, I'm a chat bot.<br/> Say hi below</h2>
+	<a id="icon" href="#letsSpeak"><i class="fa fa-angle-double-down" style="font-size:48px"></i></a>
+	</div>
+
+	<div class="letsSpeak" id="letsSpeak">
+		<h2>Talk to me!</h2>
+		<p>Click this button and say 'Hello There!'</p>
+		<button type="button" class="btn btn-danger" id="send" onclick="annyang.start()" value="Reset Form">
+			<!--adds ear icon to button-->
+			<i class="material-icons">hearing</i></button>
+
+		<!--machine response in output-->
+		<div id="clickedChat">
+			<div id="output"></div>
+		</div>
+	</div>
+
+	<div class="knowledge">
+		<h2>Chat with me!</h2>
+
+		<input type="text" class="form-control" placeholder="Talk to me..." id="userInput">
+		<br/>
+		<button type="button" class="btn btn-danger" id="send" onclick="whatSaid()" value="Reset Form">Chat</button>
+		<br/>
+		<div class="response" id="botRespo"></div>
+	</div>
+
+
+
+	<div class="teach">
+		<h2>Teach me things!</h2>
+		<input type="text" class="form-control" placeholder="When you say..." id="helpLearn">
+		<input type="text" class="form-control" placeholder="How should I respond?" id="aboutIt">
+		<br/>
+		<button type="button" class="btn btn-danger" id="send" onclick="teachMe()">Teach me!</button>
+		<br/>
+		<div id="learnlog"></div>
+
+	</div>
+
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/annyang/2.3.0/annyang.min.js"></script>
+
+	<script>
+		function init() {
+			//init function, calls local storage which has a stringify'd //array called facts
+			//need to combine facts (string) with vocab array
+			savedValue = localStorage.getItem('facts');
+
+		}
+
+
+
+		//annyang, need to figure out how to make multiple commands run
+
+		var commands = {
+			// annyang will capture anything after a splat (*) and pass it to the function.
+			// e.g. saying "Show me Batman and Robin" is the same as calling showFlickr('Batman and Robin');
+			'show me *tag': showFlickr,
+
+			// A named variable is a one word variable, that can fit anywhere in your command.
+			// e.g. saying "calculate October stats" will call calculateStats('October');
+			'calculate :month stats': calculateStats,
+
+			// By defining a part of the following command as optional, annyang will respond to both:
+			// "say hello to my little friend" as well as "say hello friend"
+			'say hello (to my little) friend': greeting
+		};
+
+		var showFlickr = function (tag) {
+			var url = 'http://api.flickr.com/services/rest/?tags=' + tag;
+			$.getJSON(url);
+
+		}
+
+		var calculateStats = function (month) {
+			$('#stats').text('Statistics for ' + month);
+		}
+
+		var greeting = function () {
+			$('#greeting').text('Hello!');
+		}
+
+
+		if (annyang) {
+			// Let's define our first command. 
+			//First the text we expect, 
+			//and then the function it should call
+			var commands = {
+				'Hello there': function () {
+					var content = ' '
+					content += '<br/>'
+					content += 'Hi, how are you??'
+					content += '<br/>'
+					content += 'I\'m a young bot called Larry.'
+					content += '<br/>'
+					content += 'Unfortunately, my ears aren\'t great (yet), so until I learn more this is all I can hear/say.'
+					content += '<br/>'
+					content += 'But, you can type in the boxes below to chat with me more!';
+
+					console.log(commands);
+					document.getElementById('output').innerHTML = content;
+
+				}
+			}
+
+		};
+
+		// Add our commands to annyang
+		annyang.addCommands(commands);
+
+
+		//need to turn off my microphone
+	</script>
+
+
+
+
+	<script>
+		function gettingJSON() {
+			document.write("jquery loaded");
+			$.getJSON("http://api.openweathermap.org/data/2.5/weather?q=London&APPID=ee6596241130f193adf1ba90e625cc10", function (json) {
+				document.write(JSON.stringify(json));
+			});
+		}
+
+		//Checks for enter press
+		$(document).keypress(function (e) {
+			if (e.which == 13) {
+				whatSaid();
+
+			}
+		});
+
+
+		//defines date so we can call later
+		var now = new Date();
+
+		//this is what the bot knows
+		var vocabulary = [
+['How can I be sure the fruits and vegetables i order are of good quality','yes'],
+['what is the delivery process?','yes'],
+[' Why is there limited items on the app?','As of now we only provide best sourced products in order to keep the quality. We are continuously working with multiple farmers across India to provide more varieties.'],
+[' Why to order by 10.30 pm?','We procure from farm on the same day as we get order. Our operation team needs time to pick, segregate  and package products to end consume' ],
+[' What is the minimum order of delivery?',' The minimum order value needs to be of Rs 100.'],
+[' Can I cancel my order?','Yes, Orders once placed can be cancelled before 10:30 pm and the amount will get credited to your Otipy wallet.'],
+[' Can I add items to my order if I have already placed order on the same day?','Yes, you can place another order on the same day and the same will get delivered together with your previous order.'],
+[' How can I raise a complaint for a delivered order?',' Go to Order History Section of the app and look for the order in Active or Delivered section. You may raise a complaint from there for any issue in the delivered order within 48 hours of delivery completion.'],
+[' What are delivery slots? ','Orders placed by 10:30 p.m. will be delivered to your Otipy partner next morning between 7 a.m. to 10 a.m.'],
+[' How do I track my order delivery?',' You may check the estimated time of arrival of your order on the home screen of the app.'],
+['Do you have cash on delivery payment mode?','No, but we do have recharge your wallet feature in the app.'],
+[' Why recharge the wallet?','It is easier to manage transactions, track monthly expenses, no issues of cash counting and failed transactions.'],
+// [' Can I refer someone and earn money?',' Yes, you can go to "Refer your neighbours" from the menu section in the app and refer your near and dear ones directly via Whatsapp.'],
+['would you like to go mountain bicycling', 'I\'m a computer silly'],
+['1','2'],
+['can i refer and earn money','yes you can'],
+];
+
+
+
+
+		function whatSaid() {
+
+
+
+			//this creates a variable input that is the userInput
+			var input = document.getElementById('userInput');
+
+			//this defines a variable userSaid (which is what the user said) //that gets the value of the Input variable
+			var userInput = input.value;
+
+
+			//this strips the punctuation and the spaces from user input
+			//punctuation marks I want to strip    
+			var punctRE = /[\u2000-\u206F\u2E00-\u2E7F\\'!"#$%&()*+,\-.\/:;<=>?@\[\]^_`{|}~]/g;
+			//fixes the spaces after I remove a bunch of punctuation
+			var spaceRE = /\s+/g;
+
+			var str = userInput;
+			//use string replace to strip the text
+			var saidStripped = str.replace(punctRE, '').replace(spaceRE, ' ');
+			//convert to lower case
+			var input = saidStripped.toLowerCase()
+
+			var notUnderstood = "I'm sorry, I don\'t understand";
+
+
+			for (var i = 0; i < vocabulary.length; i++) {
+				console.log('I am comparing ' + vocabulary[i][0] + ' with ' + input);
+				if (vocabulary[i][0] == input) {
+					var respo = vocabulary[i][1];
+					document.getElementById('botRespo').innerHTML = respo;
+					return;
+					console.log(vocabulary[i][1]);
+
+				} else {
+					document.getElementById('botRespo').innerHTML = notUnderstood;
+				}
+			}
+
+			//clears the textbox
+			//document.getElementById('userInput').reset;
+		}
+
+		//try to write this to local storage
+		//add a teach me bar
+		//this is a function that takes input 
+		function teachMe() {
+
+			var input1 = document.getElementById('helpLearn');
+			var input2 = document.getElementById('aboutIt');
+
+			var learn_input = input1.value
+			console.log(learn_input);
+			//strip punctuation and spaces
+			//learn_input becomes learnStripped
+
+			var punctuateRE = /[\u2000-\u206F\u2E00-\u2E7F\\'!"#$%&()*+,\-.\/:;<=>?@\[\]^_`{|}~]/g;
+			var space_RE = /\s+/g;
+			var str2 = learn_input;
+			var learnStripped = str2.replace(punctuateRE, '').replace(space_RE, ' ');
+			var learned = learnStripped.toLowerCase()
+
+
+
+			var about_input = input2.value
+			console.log(about_input);
+
+			document.getElementById('learnlog').innerHTML = learn_input + ', ' + about_input
+
+			var learnArr = [learnStripped, about_input];
+			console.log(learnArr);
+
+			vocabulary.push(learnArr);
+			console.log(vocabulary);
+
+
+
+			//var learnArrString = learnArr.toString();
+			//console.log(learnArrString);
+
+			var vocabString = vocabulary.toString();
+			console.log(vocabString);
+			//first, need to stringify my array before saving it to local storage
+
+			localStorage.setItem('facts', vocabString);
+
+
+		}
+
+		init();
+	</script>
+
+</body>
+
+</html>
+<!-- partial -->
+  
+</body>
+</html>
